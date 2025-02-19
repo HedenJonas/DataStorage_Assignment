@@ -10,4 +10,5 @@ public interface IProjectRepository
     Task<ProjectEntity> GetAsync(Expression<Func<ProjectEntity, bool>> expression);
     Task<ProjectEntity> UpdateAsync(ProjectEntity entity);
     Task<bool> DeleteAsync(Expression<Func<ProjectEntity, bool>> expression);
+    Task<bool> ExistsAsync(Expression<Func<ProjectEntity, bool>> expression);
 }

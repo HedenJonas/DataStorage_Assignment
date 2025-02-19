@@ -28,7 +28,7 @@ public class ProjectService(IProjectRepository projectRepository) : IProjectServ
         return projects ?? [];
     }
 
-    public async Task<Project> GetProject(Expression<Func<ProjectEntity, bool>> expression)
+    public async Task<Project> GetProjectAsync(Expression<Func<ProjectEntity, bool>> expression)
     {
         var entity = await _projectRepository.GetAsync(expression);
         var project = ProjectFactory.Create(entity);
@@ -46,5 +46,10 @@ public class ProjectService(IProjectRepository projectRepository) : IProjectServ
     {
         var result = await _projectRepository.DeleteAsync(expression);
         return result;
+    }
+
+    public async Task<bool> CheckIfProjectExistsAsync(Expression<Func<ProjectEntity, bool>> expression)
+    {
+        return await _projectRepository.ExistsAsync(expression);
     }
 }

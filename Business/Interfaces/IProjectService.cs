@@ -7,9 +7,10 @@ namespace Business.Interfaces;
 
 public interface IProjectService
 {
+    Task<bool> CheckIfProjectExistsAsync(Expression<Func<ProjectEntity, bool>> expression);
     Task<Project> CreateProjectAsync(ProjectRegistrationForm form);
     Task<bool> DeleteProjectAsync(Expression<Func<ProjectEntity, bool>> expression);
     Task<IEnumerable<Project>> GetAllProjectsAsync();
-    Task<Project> GetProject(Expression<Func<ProjectEntity, bool>> expression);
+    Task<Project> GetProjectAsync(Expression<Func<ProjectEntity, bool>> expression);
     Task<Project> UpdateProjectAsync(ProjectUpdateForm form);
 }

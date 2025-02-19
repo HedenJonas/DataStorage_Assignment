@@ -85,4 +85,9 @@ public class ProjectRepository(DataContext context) : IProjectRepository
             return false;
         }
     }
+
+    public async Task<bool> ExistsAsync(Expression<Func<ProjectEntity, bool>> expression)
+    {
+        return await _context.Projects.AnyAsync(expression);
+    }
 }
