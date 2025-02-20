@@ -38,13 +38,13 @@ public static class ProjectFactory
         EndDate = project.EndDate,
     };
 
-    public static ProjectEntity Create(ProjectUpdateForm form) => new()
+    public static ProjectEntity Create(ProjectUpdateForm updateForm) => new()
     {
-        Id = form.Id,
-        ProjectNumber = form.ProjectNumber,
-        Title = form.Title,
-        Description = form.Description,
-        StartDate = form.StartDate,
-        EndDate = form.EndDate,
+        Id = updateForm.Id,
+        ProjectNumber = updateForm.ProjectNumber,
+        Title = updateForm.Title,
+        Description = updateForm.Description,
+        StartDate = updateForm.StartDate,
+        EndDate = updateForm.EndDate,
     };
 }
