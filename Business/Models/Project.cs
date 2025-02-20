@@ -18,6 +18,8 @@ public class Project
 
     public string ProductName { get; set; } = null!;
     public decimal Rate { get; set; }
+
     public string StatusName { get; set; } = null!;
+
     public string UserName { get; set; } = null!;
 }
