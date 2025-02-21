@@ -126,10 +126,8 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
         Console.Write("Enter project desciption: ");
         NewProject.Description = Console.ReadLine()!;
 
-        Console.Write("Enter start date of project: ");
         NewProject.StartDate = GetDateFromUser("Enter start date of project: ");
 
-        Console.Write("Enter end date of project: ");
         NewProject.EndDate = GetDateFromUser("Enter end date of project: ");
 
         Console.Write("Enter customer first name: ");
@@ -147,7 +145,6 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
         Console.Write("Enter service: ");
         NewProject.ProductName = Console.ReadLine()!;
 
-        Console.Write("Enter service rate: ");
         NewProject.Rate = GetDecimalFromUser("Enter service rate: ");
 
         Console.Write("Enter status on project: ");
@@ -156,10 +153,11 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
         Console.Write("Enter project manager: ");
         NewProject.UserName = Console.ReadLine()!;
 
-        await _projectService.CreateProjectAsync(NewProject);
+        var project = await _projectService.CreateProjectAsync(NewProject);
+        Console.WriteLine($"project with project number '{project.ProjectNumber}' was created!");
     }
 
-    private DateTime GetDateFromUser(string prompt)
+    private static DateTime GetDateFromUser(string prompt)
     {
         DateTime date;
         while (true)
@@ -176,7 +174,7 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
         }
     }
 
-    private decimal GetDecimalFromUser(string prompt)
+    private static decimal GetDecimalFromUser(string prompt)
     {
         decimal value;
         while (true)

@@ -2,7 +2,7 @@
 
 namespace Data.Interfaces
 {
-    internal interface IProductRepository : IBaseRepository<ProductEntity>
+    public interface IProductRepository : IBaseRepository<ProductEntity>
     {
 
     }

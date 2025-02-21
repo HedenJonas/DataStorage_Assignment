@@ -2,35 +2,49 @@
 using Business.Factories;
 using Business.Interfaces;
 using Business.Models;
-using Data.Context;
 using Data.Entites;
 using Data.Interfaces;
-using Data.Repositories;
-using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace Business.Services;
-//public abstract class ProjectService<TEntity>(DataContext context) : BaseRepository<TEntity>(context), IProjectService<TEntity> where TEntity : class, IBaseRepository<TEntity>
 public class ProjectService(IProjectRepository projectRepository) : IProjectService
 {
     private readonly IProjectRepository _projectRepository = projectRepository;
-    //private readonly DataContext _context = context;
-    //private readonly DbSet<TEntity> _dbSet = context.Set<TEntity>();
+    private readonly ICustomerService _customerService = null!;
+    private readonly IStatusTypeService _statusTypeService = null!;
+    private readonly IUserService _userService = null!;
+    private readonly IProductService _productService = null!;
+
 
     public async Task<Project> CreateProjectAsync(ProjectRegistrationForm form)
     {
         var entity = await _projectRepository.GetAsync(x => x.ProjectNumber == form.ProjectNumber);
-        entity ??= await _projectRepository.CreateAsync(ProjectFactory.Create(form));
+        if (entity == null)
+        {
+            entity = ProjectFactory.Create(form);
 
-        return ProjectFactory.Create(entity);
+            var customer = await _customerService.CreateCustomerAsync(form);
+            var statusType = await _statusTypeService.CreateStatusTypeAsync(form);
+            var user = await _userService.CreateUserAsync(form);
+            var product = await _productService.CreateProductAsync(form);
+            entity.CustomerId = customer.Id;
+            entity.StatusID = statusType.Id;
+            entity.UserId = user.Id;
+            entity.ProductId = product.Id;
+            entity = await _projectRepository.CreateAsync(entity);
+
+            return ProjectFactory.Create(entity);
+
+            //entity.CustomerId = _customerService.CreateCustomerAsync();
+            //var customer = _customerService.CreateAsync(form.Customer); //får tillbaka customerID
+            // entity.Customer.FirstName = _customerService.CreateAsync(form.Customer);
+            //
+            // project.customerId = customer.customerId
+
+        }
+        else
+            return ProjectFactory.Create(entity);
     }
-    //public virtual async Task<TEntity> CreateProjectAsync(Expression<Func<TEntity, bool>> expression)
-    //{
-    //    var entity = await _dbSet.GetAsync(expression);
-    //    entity ??= await _dbSet.CreateAsync(ProjectFactory.Create(form));
-
-    //    return ProjectFactory.Create(entity);
-    //}
 
     public async Task<IEnumerable<Project>> GetAllProjectsAsync()
     {
@@ -46,12 +60,6 @@ public class ProjectService(IProjectRepository projectRepository) : IProjectServ
         return project ?? null!;
     }
 
-    //public async Task<Project> UpdateProjectAsync(ProjectUpdateForm form)
-    //{
-    //    var entity = await _projectRepository.UpdateAsync(ProjectFactory.Create(form));
-    //    var project = ProjectFactory.Create(entity);
-    //    return project ?? null!;
-    //}
     public async Task<Project> UpdateProjectAsync(ProjectUpdateForm form)
     {
         var projectNumber = form.ProjectNumber;

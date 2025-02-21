@@ -26,6 +26,14 @@ public static class ProjectFactory
         Description = entity.Description,
         StartDate = entity.StartDate,
         EndDate = entity.EndDate,
+        FirstName = entity.Customer.FirstName,
+        LastName = entity.Customer.LastName,
+        Email = entity.Customer.Email,
+        Address = entity.Customer.Address,
+        ProductName = entity.Product.ProductName,
+        Rate = entity.Product.Rate,
+        StatusName = entity.Status.StatusName,
+        UserName = entity.User.UserName,
     };
 
     public static ProjectUpdateForm Create(Project project) => new()
@@ -36,6 +44,14 @@ public static class ProjectFactory
         Description = project.Description,
         StartDate = project.StartDate,
         EndDate = project.EndDate,
+        FirstName = project.FirstName,
+        LastName = project.LastName,
+        Email = project.Email,
+        Address = project.Address,
+        ProductName = project.ProductName,
+        Rate = project.Rate,
+        StatusName = project.StatusName,
+        UserName = project.UserName,
     };
 
     public static ProjectEntity Create(ProjectUpdateForm updateForm) => new()
@@ -47,4 +63,10 @@ public static class ProjectFactory
         StartDate = updateForm.StartDate,
         EndDate = updateForm.EndDate,
     };
+
+    
+
+    
+    
+    
 }
