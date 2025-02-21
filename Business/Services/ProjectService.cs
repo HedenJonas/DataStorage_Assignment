@@ -7,13 +7,18 @@ using Data.Interfaces;
 using System.Linq.Expressions;
 
 namespace Business.Services;
-public class ProjectService(IProjectRepository projectRepository) : IProjectService
+public class ProjectService(IProjectRepository projectRepository, 
+                            ICustomerService customerService,
+                            IStatusTypeService statusTypeService,
+                            IUserService userService,
+                            IProductService productService) : IProjectService
 {
     private readonly IProjectRepository _projectRepository = projectRepository;
-    private readonly ICustomerService _customerService = null!;
-    private readonly IStatusTypeService _statusTypeService = null!;
-    private readonly IUserService _userService = null!;
-    private readonly IProductService _productService = null!;
+    private readonly ICustomerService _customerService = customerService;
+    //private readonly CustomerService? _customerService;
+    private readonly IStatusTypeService _statusTypeService = statusTypeService;
+    private readonly IUserService _userService = userService;
+    private readonly IProductService _productService = productService;
 
 
     public async Task<Project> CreateProjectAsync(ProjectRegistrationForm form)

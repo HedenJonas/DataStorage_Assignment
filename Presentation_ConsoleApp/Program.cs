@@ -20,7 +20,11 @@ var serviceCollection = new ServiceCollection()
 .AddScoped<IUserRepository, UserRepository>()
 
 // alla services
+.AddScoped<ICustomerService, CustomerService>()
+.AddScoped<IProductService, ProductService>()
 .AddScoped<IProjectService, ProjectService>()
+.AddScoped<IStatusTypeService, StatusTypeService>()
+.AddScoped<IUserService, UserService>()
 
 // alla menyer
 .AddScoped<IMenuDialog, MenuDialog>()
