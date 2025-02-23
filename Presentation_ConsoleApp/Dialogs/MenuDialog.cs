@@ -37,19 +37,19 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
                     break;
 
                 case "3":
-                    Console.Write("Enter project number to search: ");
+                    Console.Write("Enter project number to search for a project: ");
                     string projectGet = Console.ReadLine()!;
                     await ShowProjectByProjectNumber(projectGet);
                     break;
 
                 case "4":
-                    Console.Write("Enter project number to search: ");
+                    Console.Write("Enter project number to update a project: ");
                     string projectUpdate = Console.ReadLine()!;
                     await ShowUpdateProjectByProjectNumber(projectUpdate);
                     break;
 
                 case "5":
-                    Console.Write("Enter project number to search: ");
+                    Console.Write("Enter project number to delete a project: ");
                     string projectDelete = Console.ReadLine()!;
                     await ShowDeleteProject(projectDelete);
                     break;
@@ -79,7 +79,7 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
         {
             var AllProjects = await _projectService.GetAllProjectsAsync();
             Console.Clear();
-            Console.WriteLine("All users: ");
+            Console.WriteLine("All projects: ");
 
             if (AllProjects == null || !AllProjects.Any())
             {
@@ -103,6 +103,7 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
                 Console.WriteLine($"Service rate: {user.Rate}");
                 Console.WriteLine($"Status: {user.StatusName}");
                 Console.WriteLine($"project manager: {user.UserName}");
+                Console.WriteLine("--------------------------------------");
             }
         }
         catch (Exception ex)
@@ -117,6 +118,7 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
     {
         var NewProject = ProjectFactory.Create();
         Console.Clear();
+
         Console.Write("Enter project number: ");
         NewProject.ProjectNumber = Console.ReadLine()!;
 
@@ -153,8 +155,23 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
         Console.Write("Enter project manager: ");
         NewProject.UserName = Console.ReadLine()!;
 
-        var project = await _projectService.CreateProjectAsync(NewProject);
-        Console.WriteLine($"project with project number '{project.ProjectNumber}' was created!");
+        var check = await _projectService.CheckIfProjectExistsAsync(x => x.ProjectNumber == NewProject.ProjectNumber);
+
+        if(check == false)
+        {
+            var project = await _projectService.CreateProjectAsync(NewProject);
+            Console.Clear();
+            Console.WriteLine($"project with project number '{project.ProjectNumber}' was created!");
+            Console.WriteLine("Press any key to continue.");
+            Console.ReadKey();
+        }
+        else
+        {
+            Console.Clear();
+            Console.WriteLine($"project with project number '{NewProject.ProjectNumber}' already exists!");
+            Console.WriteLine("Press any key to continue.");
+            Console.ReadKey();
+        }
     }
 
     private static DateTime GetDateFromUser(string prompt)
@@ -230,7 +247,11 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
                 await _projectService.UpdateProjectAsync(updatedProject);
             }
             else
+            {
                 Console.WriteLine($"No project found with Project Number: {projectNumber}");
+                Console.WriteLine("Press any key to try again.");
+            }
+                
         }
         catch (Exception ex)
         {
@@ -241,6 +262,7 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
 
     public async Task ShowProjectByProjectNumber(string projectNumber)
     {
+        Console.Clear();
         try
         {
             var project = await _projectService.GetProjectAsync(p => p.ProjectNumber == projectNumber);
@@ -262,7 +284,11 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
                 Console.WriteLine($"Project manager: {project.UserName}");
             }
             else
+            {
                 Console.WriteLine($"No project found with Project Number: {projectNumber}");
+                Console.WriteLine("Press any key to try again.");
+            }
+                
         }
         catch (Exception ex)
         {
@@ -273,17 +299,21 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
 
     public async Task ShowDeleteProject(string projectNumber)
     {
+        Console.Clear();
         try
         {
             var project = await _projectService.GetProjectAsync(x => x.ProjectNumber == projectNumber);
 
-            if (project.ProjectNumber == projectNumber)
+            if (project != null)
             {
                 await _projectService.DeleteProjectAsync(x => x.ProjectNumber == projectNumber);
-                Console.WriteLine($"Project {nameof(project.ProjectNumber)} has been deleted!");
+                Console.WriteLine($"Project {nameof(projectNumber)} has been deleted!");
             }
             else
+            {
                 Console.WriteLine($"No project found with Project Number: {projectNumber}");
+                Console.WriteLine("Press any key to try again.");
+            }
         }
         catch (Exception ex)
         {

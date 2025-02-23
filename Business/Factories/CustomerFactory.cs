@@ -22,4 +22,12 @@ public static class CustomerFactory
         Email = entity.Email,
         Address = entity.Address,
     };
+
+    public static CustomerEntity Create(ProjectUpdateForm form) => new()
+    {
+        FirstName = form.FirstName,
+        LastName = form.LastName,
+        Email = form.Email,
+        Address = form.Address,
+    };
 }

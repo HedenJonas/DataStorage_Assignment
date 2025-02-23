@@ -11,14 +11,15 @@ public class ProjectService(IProjectRepository projectRepository,
                             ICustomerService customerService,
                             IStatusTypeService statusTypeService,
                             IUserService userService,
-                            IProductService productService) : IProjectService
+                            IProductService productService,
+                            ICustomerRepository customerRepository) : IProjectService
 {
     private readonly IProjectRepository _projectRepository = projectRepository;
     private readonly ICustomerService _customerService = customerService;
-    //private readonly CustomerService? _customerService;
     private readonly IStatusTypeService _statusTypeService = statusTypeService;
     private readonly IUserService _userService = userService;
     private readonly IProductService _productService = productService;
+    private readonly ICustomerRepository _customerRepository = customerRepository;
 
 
     public async Task<Project> CreateProjectAsync(ProjectRegistrationForm form)
@@ -40,12 +41,6 @@ public class ProjectService(IProjectRepository projectRepository,
 
             return ProjectFactory.Create(entity);
 
-            //entity.CustomerId = _customerService.CreateCustomerAsync();
-            //var customer = _customerService.CreateAsync(form.Customer); //får tillbaka customerID
-            // entity.Customer.FirstName = _customerService.CreateAsync(form.Customer);
-            //
-            // project.customerId = customer.customerId
-
         }
         else
             return ProjectFactory.Create(entity);
@@ -61,15 +56,26 @@ public class ProjectService(IProjectRepository projectRepository,
     public async Task<Project> GetProjectAsync(Expression<Func<ProjectEntity, bool>> expression)
     {
         var entity = await _projectRepository.GetAsync(expression);
-        var project = ProjectFactory.Create(entity);
-        return project ?? null!;
+        if(entity != null)
+        {
+            var project = ProjectFactory.Create(entity);
+            return project;
+        }
+        
+        return null!;
     }
 
     public async Task<Project> UpdateProjectAsync(ProjectUpdateForm form)
     {
+        var customerEntity = CustomerFactory.Create(form);
+        var customer = await _customerRepository.UpdateAsync(x => x.Email == form.Email, customerEntity);
+        //entity.CustomerId = customer.Id;
+        //entity.StatusID = statusType.Id;
+        //entity.UserId = user.Id;
+        //entity.ProductId = product.Id;
         var projectNumber = form.ProjectNumber;
-        var entity = await _projectRepository.UpdateAsync(p => p.ProjectNumber == projectNumber, ProjectFactory.Create(form));
-        var project = ProjectFactory.Create(entity);
+        //var entity = await _projectRepository.UpdateAsync(p => p.ProjectNumber == projectNumber, ProjectFactory.Create(form));
+        //var project = ProjectFactory.Create(entity);
         return project ?? null!;
     }
 
