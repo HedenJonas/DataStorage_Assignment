@@ -25,10 +25,10 @@ public class ProjectRepository(DataContext context) : BaseRepository<ProjectEnti
     public override async Task<ProjectEntity> GetAsync(Expression<Func<ProjectEntity, bool>> expression)
     {
         var entity = await _context.Projects
-            .Include(p => p.Customer)     // Laddar Customer
-            .Include(p => p.Product)      // Laddar Product
-            .Include(p => p.Status)       // Laddar Status
-            .Include(p => p.User)         // Laddar User
+            .Include(p => p.Customer)
+            .Include(p => p.Product)
+            .Include(p => p.Status)
+            .Include(p => p.User)
             .FirstOrDefaultAsync(expression);
 
         return entity ?? null!;
@@ -42,13 +42,12 @@ public class ProjectRepository(DataContext context) : BaseRepository<ProjectEnti
         try
         {
             var existingEntity = await _context.Projects
-            .Include(p => p.Customer)     // Laddar Customer
-            .Include(p => p.Product)      // Laddar Product
-            .Include(p => p.Status)       // Laddar Status
-            .Include(p => p.User)         // Laddar User
+            .Include(p => p.Customer)
+            .Include(p => p.Product)
+            .Include(p => p.Status)
+            .Include(p => p.User)
             .FirstOrDefaultAsync(expression);
 
-            //var existingEntity = await _dbSet.FirstOrDefaultAsync(expression) ?? null!;
             if (existingEntity == null)
                 return null!;
 

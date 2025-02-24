@@ -1,6 +1,7 @@
 ﻿using Business.Dtos;
 using Business.Factories;
 using Business.Interfaces;
+using Business.Models;
 using Data.Entites;
 using Data.Interfaces;
 
@@ -20,11 +21,5 @@ public class CustomerService(ICustomerRepository customerRepository) : ICustomer
         }
         else
             return entity;
-    }
-
-    public async Task<CustomerEntity> UpdateCustomerAsync(ProjectUpdateForm form)
-    {
-        var entity = await _customerRepository.UpdateAsync(x => x.Email == form.Email, ProjectFactory.Create(form));
-        return entity ?? null!;
     }
 }

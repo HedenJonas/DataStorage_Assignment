@@ -36,6 +36,16 @@ public static class ProjectFactory
         UserName = entity.User.UserName,
     };
 
+    public static Project CreateUpdate(ProjectEntity entity) => new()
+    {
+        Id = entity.Id,
+        ProjectNumber = entity.ProjectNumber,
+        Title = entity.Title,
+        Description = entity.Description,
+        StartDate = entity.StartDate,
+        EndDate = entity.EndDate,
+    };
+
     public static ProjectUpdateForm Create(Project project) => new()
     {
         Id = project.Id,
@@ -63,10 +73,4 @@ public static class ProjectFactory
         StartDate = updateForm.StartDate,
         EndDate = updateForm.EndDate,
     };
-
-    
-
-    
-    
-    
 }

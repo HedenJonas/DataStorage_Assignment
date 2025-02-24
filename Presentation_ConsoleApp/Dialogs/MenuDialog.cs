@@ -1,7 +1,7 @@
 ﻿using Business.Factories;
 using Business.Interfaces;
-using Business.Models;
 using Presentation_ConsoleApp.Interfaces;
+using System.Globalization;
 
 namespace Presentation_ConsoleApp.Dialogs;
 
@@ -93,8 +93,8 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
                 Console.WriteLine($"Project number: {user.ProjectNumber}");
                 Console.WriteLine($"Title: {user.Title}");
                 Console.WriteLine($"Desciption: {user.Description}");
-                Console.WriteLine($"Start date: {user.StartDate}");
-                Console.WriteLine($"End date: {user.EndDate}");
+                Console.WriteLine($"Start date: {user.StartDate:dd/MM/yyyy}");
+                Console.WriteLine($"End date: {user.EndDate:dd/MM/yyyy}");
                 Console.WriteLine($"First name: {user.FirstName}");
                 Console.WriteLine($"Last name: {user.LastName}");
                 Console.WriteLine($"Email: {user.Email}");
@@ -128,9 +128,9 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
         Console.Write("Enter project desciption: ");
         NewProject.Description = Console.ReadLine()!;
 
-        NewProject.StartDate = GetDateFromUser("Enter start date of project: ");
+        NewProject.StartDate = GetDate("Enter start date of project (DD-MM-YYYY): ");
 
-        NewProject.EndDate = GetDateFromUser("Enter end date of project: ");
+        NewProject.EndDate = GetDate("Enter end date of project (DD-MM-YYYY): ");
 
         Console.Write("Enter customer first name: ");
         NewProject.FirstName = Console.ReadLine()!;
@@ -147,7 +147,7 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
         Console.Write("Enter service: ");
         NewProject.ProductName = Console.ReadLine()!;
 
-        NewProject.Rate = GetDecimalFromUser("Enter service rate: ");
+        NewProject.Rate = GetDecimal("Enter service rate: ");
 
         Console.Write("Enter status on project: ");
         NewProject.StatusName = Console.ReadLine()!;
@@ -174,15 +174,15 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
         }
     }
 
-    private static DateTime GetDateFromUser(string prompt)
+    private static DateTime GetDate(string InputDate)
     {
         DateTime date;
         while (true)
         {
-            Console.Write(prompt);
+            Console.Write(InputDate);
             string input = Console.ReadLine()!;
 
-            if (DateTime.TryParse(input, out date))
+            if (DateTime.TryParseExact(input, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
             {
                 return date;
             }
@@ -191,12 +191,12 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
         }
     }
 
-    private static decimal GetDecimalFromUser(string prompt)
+    private static decimal GetDecimal(string rate)
     {
-        decimal value;
+        decimal value = 0;
         while (true)
         {
-            Console.Write(prompt);
+            Console.Write(rate);
             string input = Console.ReadLine()!;
 
             if (decimal.TryParse(input, out value))
@@ -222,10 +222,10 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
                 project.Title = Console.ReadLine()!;
                 Console.WriteLine($"Current description: {project.Description}. Enter new description: ");
                 project.Description = Console.ReadLine()!;
-                Console.WriteLine($"Current start date: {project.StartDate}");
-                project.EndDate = GetDateFromUser("New start date of project: ");
-                Console.WriteLine($"Current end date: {project.EndDate}");
-                project.StartDate = GetDateFromUser("New end date of project: ");
+                Console.WriteLine($"Current start date: {project.StartDate:dd/MM/yyyy}");
+                project.StartDate = GetDate("New start date of project (DD-MM-YYYY): ");
+                Console.WriteLine($"Current end date: {project.EndDate:dd/MM/yyyy}");
+                project.EndDate = GetDate("New end date of project (DD-MM-YYYY): ");
                 Console.WriteLine($"Current first name: {project.FirstName}. Enter new first name: ");
                 project.FirstName = Console.ReadLine()!;
                 Console.WriteLine($"Current last name: {project.LastName}. Enter new last name: ");
@@ -237,7 +237,7 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
                 Console.WriteLine($"Current service: {project.ProductName}. Enter new service: ");
                 project.ProductName = Console.ReadLine()!;
                 Console.WriteLine($"Current service rate: {project.Rate}. Enter new rate: ");
-                project.Rate = GetDecimalFromUser("Enter new service rate: ");
+                project.Rate = GetDecimal("Enter new service rate: ");
                 Console.WriteLine($"Current status: {project.StatusName}. Enter new status: ");
                 project.StatusName = Console.ReadLine()!;
                 Console.WriteLine($"Current project manager: {project.UserName}. Enter new manager: ");
@@ -245,6 +245,8 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
 
                 var updatedProject = ProjectFactory.Create(project);
                 await _projectService.UpdateProjectAsync(updatedProject);
+
+                Console.WriteLine($"Project {projectNumber} updated!");
             }
             else
             {
@@ -272,8 +274,8 @@ public class MenuDialog(IProjectService projectService) : IMenuDialog
                 Console.WriteLine($"Project number: {project.ProjectNumber}");
                 Console.WriteLine($"Title: {project.Title}");
                 Console.WriteLine($"Description: {project.Description}");
-                Console.WriteLine($"Start date: {project.StartDate}");
-                Console.WriteLine($"End date: {project.EndDate}");
+                Console.WriteLine($"Start date: {project.StartDate:dd/MM/yyyy}");
+                Console.WriteLine($"End date: {project.EndDate:dd/MM/yyyy}");
                 Console.WriteLine($"First name: {project.FirstName}");
                 Console.WriteLine($"Last name: {project.LastName}");
                 Console.WriteLine($"Email: {project.Email}");

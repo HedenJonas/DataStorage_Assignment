@@ -15,4 +15,8 @@ public static class UserFactory
         Id = entity.Id,
         UserName = entity.UserName,
     };
+    public static UserEntity Create(ProjectUpdateForm form) => new()
+    {
+        UserName = form.UserName
+    };
 }

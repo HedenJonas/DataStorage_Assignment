@@ -15,4 +15,9 @@ public static class StatusTypeFactory
         Id = entity.Id,
         StatusName = entity.StatusName,
     };
+
+    public static StatusTypeEntity Create(ProjectUpdateForm form) => new()
+    {
+        StatusName = form.StatusName
+    };
 }

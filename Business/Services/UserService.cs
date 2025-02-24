@@ -1,10 +1,8 @@
 ﻿using Business.Dtos;
 using Business.Factories;
 using Business.Interfaces;
-using Business.Models;
 using Data.Entites;
 using Data.Interfaces;
-using Data.Repositories;
 
 namespace Business.Services;
 

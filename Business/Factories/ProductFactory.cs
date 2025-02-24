@@ -20,4 +20,9 @@ public static class ProductFactory
         Units = entity.Units,
         Rate = entity.Rate,
     };
+    public static ProductEntity Create(ProjectUpdateForm form) => new()
+    {
+        ProductName = form.ProductName,
+        Rate = form.Rate,
+    };
 }
